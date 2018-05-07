@@ -29,6 +29,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+//引入public作为静态文件根目录，引入文件可以直接从其子目录直接引入；如路径写/javascript/...
 
 // Make our db accessible to our router
 app.use(function (req, res, next) {
