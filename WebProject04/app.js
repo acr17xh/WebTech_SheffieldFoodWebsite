@@ -10,12 +10,13 @@ var mongo = require('mongodb');
 var monk = require('monk');
 var db = monk('localhost:27017/DB1');
 
+// var dbOperatonsRouter = require('./routes/dbOperations');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-// var dbOperatonsRouter = require('./routes/dbOperations');
 var restaurantsRouter = require('./routes/restaurantsDAO');
 var reviewsRouter = require('./routes/reviewsDAO');
 var photosRouter = require('./routes/photoDAO');
+var upload = require('./routes/upload');
 
 
 var app = express();
@@ -36,13 +37,14 @@ app.use(function (req, res, next) {
     req.db = db;
     next();
 });
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
 //dbOperatonsRouter仅仅测试用
 // app.use('/restaurants', dbOperatonsRouter);
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
 app.use('/restaurants', restaurantsRouter);
 app.use('/reviews', reviewsRouter);
 app.use('/photos', photosRouter);
+app.use('/upload',upload);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
