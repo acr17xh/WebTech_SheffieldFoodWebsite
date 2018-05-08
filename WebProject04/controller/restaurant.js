@@ -1,12 +1,12 @@
 var express = require('express');
 var router = express.Router();
 var monk = require('monk');
-//导入url模块，暂时用不到
-var url = require("url");
-//导入querystring模块（解析post请求数据）,暂时用不到，我们利用req.query（GET, url传参数）或者req.body（POST,表单）取值
-var queryString = require('querystring');
+
+
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
+
+//A middleware used to upload file
 var multer = require('multer');
 
 exports.getRestaurants = function (req, res) {
@@ -43,29 +43,44 @@ var storage = multer.diskStorage({
 });
 
 var upload = multer({storage: storage});
+
 //暂时使用multer去解析multipart/form-data,不用connect-multiparty
 //暂时不在post中加入multipartMiddleware
 //餐厅官方图片暂定只准上传一张
 
+
+
+
 exports.postRestaurans = function (req, res) {
 
     var db = req.db;
-    var collection = db.get('restaurant');
+    //get a collection
+    var collection = db.get('rest');
     var date = new Date();
     date = date.toDateString();
+    console.log(date);
+
     //应该通过google map api得到lag,lng,这个给何旭 :>
     var lag = 77.8;
     var lng = 45.8;
+
     //评分可以由初始新建此餐厅的用户打分，也可以随机生成一个
-    var restaurant_rating = req.body.restaurant_rating;
+    var rating = req.body.restaurant_rating;
+    console.log(rating);
+
     var file = req.file;
     var path = file.path;
     path = path.toString();
+    console.log(path);
+
     //去掉public和把\替换成/
     path = path.replace(new RegExp("\\\\", "gm"), "/");
     path = path.replace("public", "");
     console.log(path);
+
     body = req.body;
+    console.log(body.restaurant_name);
+
     var data = {
         "restaurant_name": body.restaurant_name,
         "address": body.address,
@@ -83,11 +98,13 @@ exports.postRestaurans = function (req, res) {
             "lat": lag,
             "lng": lng
         },
-        "restaurant_rating": restaurant_rating,
+        "restaurant_rating": rating,
         //这两个需要在用户插入photo和review之后update，利用数组的$addToSet和$each
         "photos_id": [],
         "reviews_id": []
     };
+
+
     collection.insert(data, function (err, docs) {
         if (err != null) {
             console.log(err);

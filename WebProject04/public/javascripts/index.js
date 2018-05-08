@@ -5,7 +5,7 @@ $(function () {
             alert("Form submitted!");
             //试一试POST和GET两种方式
             //MyAjaxSubmit();
-            MyAjaxSubmit2();
+            MyAjaxSubmit();
         });
         //用表单的submit触发，两种皆可
         /*  $("#xForm").submit(function (e) {
@@ -48,7 +48,7 @@ function MyAjaxSubmit() {
                 //Chrome里F12查看
                 console.log(dataJSON);
                 //直接取dataJSON里的a字段的值就行
-                $("#ajaxData").text("咯咯哒POST：" + dataJSON.a);
+                $("#ajaxData").text("哒POST：" + dataJSON.a);
             },
             error: function (xhr, status, error) {
                 alert(error.message);

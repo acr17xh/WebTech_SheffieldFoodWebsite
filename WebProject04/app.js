@@ -8,7 +8,8 @@ var logger = require('morgan');
 // Mongodb+Monk
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk('localhost:27017/DB1');
+var db = monk('localhost:27017/restaurant');
+
 
 // var dbOperatonsRouter = require('./routes/dbOperations');
 var indexRouter = require('./routes/index');
@@ -29,15 +30,16 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 //引入public作为静态文件根目录，引入文件可以直接从其子目录直接引入；如路径写/javascript/...
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 // Make our db accessible to our router
 app.use(function (req, res, next) {
     req.db = db;
     next();
 });
-//dbOperatonsRouter仅仅测试用
+
 // app.use('/restaurants', dbOperatonsRouter);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
