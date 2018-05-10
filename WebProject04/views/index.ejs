@@ -9,6 +9,10 @@
 
 
 <body>
+
+
+
+
 <h1><%= title %></h1>
 <p>Welcome to <%= title %></p>
 <!--<form id=“xForm" onsubmit="onSubmit()">-->
@@ -29,6 +33,14 @@
         <input type="button" name="xFormbutton" value="Submit" id="xFormbutton">
     </p>
 </form>
+
+
+<form id="sForm" onsubmit="return false" method="get">
+    <input type="text" name="keyword" id="keyword">
+    <input type="button" name="search" id="search" value="check">
+</form>
+
+
 <label id="ajaxData"></label>
 <br/>
 <img src="/upload_images/nihendeyia.jpg"/>

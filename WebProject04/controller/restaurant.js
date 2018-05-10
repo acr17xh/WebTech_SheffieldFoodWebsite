@@ -13,9 +13,13 @@ exports.getRestaurants = function (req, res) {
     var db = req.db;
     var collection = db.get('restaurant');
     var keyword = req.query.keyword;
+    console.log(keyword);
     collection.find({$text: {$search: keyword}}, function (err, docs) {
         var result = docs;
         res.json(result);
+
+        //注意：如果使用下面这种返回方式（序列化），前台ajax需要parse()以下把字符串转回对象
+        // res.json(JSON.stringify(result));
     });
 };
 
@@ -55,7 +59,7 @@ exports.postRestaurans = function (req, res) {
 
     var db = req.db;
     //get a collection
-    var collection = db.get('rest');
+    var collection = db.get('restaurant');
     var date = new Date();
     date = date.toDateString();
     console.log(date);

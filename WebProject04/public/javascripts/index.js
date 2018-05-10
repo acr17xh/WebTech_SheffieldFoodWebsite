@@ -15,6 +15,12 @@ $(function () {
           });*/
 });
 
+$(function () {
+    $("#search").click(function () {
+        PostKeyword();
+    });
+});
+
 
 
 
@@ -56,9 +62,6 @@ function MyAjaxSubmit() {
         }
     );
 }
-
-
-
 //GET版
 function MyAjaxSubmit2() {
     var formSerialized = $('#xForm').serialize();
@@ -97,4 +100,37 @@ function MyAjaxSubmit2() {
             }
         }
     );
+}
+
+
+
+//get the all matching keyword restaurants
+function PostKeyword() {
+    var keyword = $("#keyword").val();
+    var Formdata = {
+        "keyword": keyword
+    };
+
+    // var jsonData = JSON.stringify(Formdata);
+    // alert("JSONData: " + jsonData);
+
+    $.ajax({
+        url:"http://localhost:3000/restaurants/restaurants",
+        data:Formdata,
+        type: 'GET',
+        success: function (data) {
+            alert("GET Ajax is successful, return data in success: function (data): \n" + data);
+            //在这里使用JQuery或者JS把data里的值设置进HTML元素里去
+            //如果是数组类型的Json用JS函数遍历一下设置列表或表格就行
+            //res.json返回的是json object
+
+
+            $("#ajaxData").text("咯咯哒GET: " + data[0].restaurant_name + data[0].address);
+        },
+        error: function (xhr, status, error) {
+            alert("wrong");
+            alert(error.message);
+        }
+    })
+
 }

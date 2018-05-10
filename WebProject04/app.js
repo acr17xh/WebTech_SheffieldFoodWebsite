@@ -8,7 +8,7 @@ var logger = require('morgan');
 // Mongodb+Monk
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk('localhost:27017/restaurant');
+var db = monk('localhost:27017/rest');
 
 
 // var dbOperatonsRouter = require('./routes/dbOperations');
