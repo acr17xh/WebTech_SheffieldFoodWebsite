@@ -6,7 +6,6 @@ router.get('/', function (req, res, next) {
     res.render('index', {title: 'Sheffield Food'});
 });
 
-
 /*跳转到restaurant.ejs的路由*/
 router.get('/restaurant', function (req, res, next) {
     var _id = req.query.restaurant_id;
@@ -31,8 +30,6 @@ router.post('/test1', function (req, res, next) {
     var fakeJSON = {"a": "hahaha", "b": "xixixi"};
     res.json(JSON.stringify(fakeJSON));
 });
-
-
 router.get('/test2', function (req, res, next) {
     var formData = req.query;
     //req.query就是获取的参数对象，此时formData为对象
