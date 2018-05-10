@@ -1,4 +1,3 @@
-
 $(function () {
     $("#search").click(function () {
         PostKeyword();
@@ -11,11 +10,10 @@ function PostKeyword() {
     var Formdata = {
         "keyword": keyword
     };
-
     $.ajax({
         url:"http://localhost:3000/restaurants/restaurants",
         data:Formdata,
-        type: 'GET',
+        type:'GET',
         success: function (data) {
             alert("GET Ajax is successful, return data in success: function (data): \n" + data);
             //在这里使用JQuery或者JS把data里的值设置进HTML元素里去
@@ -23,15 +21,21 @@ function PostKeyword() {
             //res.json返回的是json object
             console.log(data);
             var num = data.length;
-            $("#ajaxData").text("The Restaurants:")
-            for (var i = 0; i < num; i++) {
-                console.log(i);
-                $("#ajaxData").append(GenerateSection(
-                    data[i].official_photo_url,data[i].restaurant_name,data[i].type_of_cuisine,
-                    data[i].description,data[i].address,data[i].restaurant_rating
-                ));
-                // $("#ajaxData").after(data[i].restaurant_name + data[i].address+ "\n");
+            if (num != 0){
+                for (var i = 0; i < num; i++) {
+                    console.log(i);
+
+                    //GenerateSection used to show data returned from ajax
+                    GenerateSection(data[i].official_photo_url,data[i].restaurant_name,data[i].type_of_cuisine,
+                        data[i].description,data[i].address,data[i].restaurant_rating);
+
+                    //OMG!:选择ajaxData里面最后一个h3(也就是restaurant name)前面加上标号;
+                    // 因为每次最后一个是最新添加的
+                    $("#ajaxData h3:last").prepend(i+1 + ". ");
+                }
             }
+
+            else {alert("Sorry, no restaurant matching your condition...")}
         },
         error: function (xhr, status, error) {
             alert("wrong");
@@ -40,10 +44,10 @@ function PostKeyword() {
     })
 }
 
-
+//generate display area via ajax
 function GenerateSection(img_path,para_name,para_type,para_discription,para_address,para_rating){
+    //Built rely on the html document from chu xi
     var section = $("<section></section>");
-
     var container_div = $("<div class='container'></div>");
     var row_div = $("<div class='row align-items-center'></div>");
     var col_div = $("<div class='col-lg-6'></div>");
@@ -53,33 +57,39 @@ function GenerateSection(img_path,para_name,para_type,para_discription,para_addr
     var another_col_div = $("<div class='col-lg-6'></div>");
     var another_p5_div = $("<div class='p-5'></div>");
     var restname = $("<h3 class='display-4'></h3>");
-    var foodtype = $("<h4></h4>");
-    var discription = $("<p></p>");
-    var address = $("<p></p>");
-    var rating = $("<p></p>");
+    var foodtype = $("<h4>Food type: </h4>");
+    var discription = $("<p>Description: </p>");
+    var address = $("<p>Address: </p>");
+    var rating = $("<p>Rating: </p>");
 
-    // img.setAttribute("src",img_path);
+    var butt = $(" <input type=\"button\" class=\"btn btn-primary btn-lg\" value=\"Have a look!\">");
+
+    img.attr("src", img_path);
 
     p5_div.append(img);
-    col_div.appendChild(p5_div);
-    row_div.appendChild(col_div);
-    container_div.appendChild(row_div);
-    section.appendChild(container_div);
+    col_div.append(p5_div);
+    row_div.append(col_div);
+    container_div.append(row_div);
+    section.append(container_div);
 
-    restname.innerHTML = para_name;
-    foodtype.innerHTML = para_type;
-    discription.innerHTML = para_discription;
-    address.innerHTML = para_address;
-    rating.innerHTML = para_rating;
+    restname.append(para_name);
+    foodtype.append(para_type);
+    discription.append(para_discription);
+    address.append(para_address);
+    rating.append(para_rating);
 
-    another_p5_div.appendChild(restname);
-    another_p5_div.appendChild(foodtype);
-    another_p5_div.appendChild(discription);
-    another_p5_div.appendChild(address);
-    another_p5_div.appendChild(rating);
-    another_col_div.appendChild(another_p5_div);
-    row_div.appendChild(another_col_div);
+    another_p5_div.append(restname);
+    another_p5_div.append(foodtype);
+    another_p5_div.append(discription);
+    another_p5_div.append(address);
+    another_p5_div.append(rating);
+    another_p5_div.append(butt);
+    another_col_div.append(another_p5_div);
+    row_div.append(another_col_div);
+
+    $("#ajaxData").append(section);
 }
+
 
 
 
