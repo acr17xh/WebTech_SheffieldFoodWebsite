@@ -6,33 +6,9 @@ var monk = require('monk');
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 
+
 //A middleware used to upload file
 var multer = require('multer');
-
-exports.getRestaurants = function (req, res) {
-    var db = req.db;
-    var collection = db.get('restaurant');
-    var keyword = req.query.keyword;
-    console.log(keyword);
-    collection.find({$text: {$search: keyword}}, function (err, docs) {
-        var result = docs;
-        res.json(result);
-
-        //注意：如果使用下面这种返回方式（序列化），前台ajax需要parse()以下把字符串转回对象
-        // res.json(JSON.stringify(result));
-    });
-};
-
-exports.getRestaurant = function (req, res) {
-    var db = req.db;
-    var collection = db.get('restaurant');
-    var id = monk.id(req.query.restaurant_id);
-    var restaurant_id = {'_id': id};
-    collection.find(restaurant_id, function (err, docs) {
-        res.json(docs);
-    })
-};
-
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -52,8 +28,30 @@ var upload = multer({storage: storage});
 //暂时不在post中加入multipartMiddleware
 //餐厅官方图片暂定只准上传一张
 
+exports.getRestaurants = function (req, res) {
+    var db = req.db;
+    var collection = db.get('restaurant');
+    var keyword = req.query.keyword;
+    console.log(keyword);
+    collection.find({$text: {$search: keyword}}, function (err, docs) {
+        var result = docs;
+        res.json(result);
 
+        //注意：如果使用下面这种返回方式（序列化），前台ajax需要parse()以下把字符串转回对象
+        // res.json(JSON.stringify(result));
+    });
+};
 
+exports.getRestaurant = function (req, res) {
+    var db = req.db;
+    var collection = db.get('restaurant');
+    var id = monk.id(req.query.restaurant_id);
+
+    var restaurant_id = {'_id': id};
+    collection.find(restaurant_id, function (err, docs) {
+        res.json(docs);
+    })
+};
 
 exports.postRestaurans = function (req, res) {
 

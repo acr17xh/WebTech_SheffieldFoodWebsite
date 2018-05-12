@@ -10,15 +10,29 @@ function PostKeyword() {
     var Formdata = {
         "keyword": keyword
     };
+
+
+    //事件委托，将ajaxData下的input元素的事件绑定到ajaxData
+    //点击input会触发ajaxData的绑定的事件
+    $("#ajaxData").on("click","input",function () {
+        alert(this.id);
+        var restaurant_id = this.id;
+        var url = "http://localhost:3000/restaurant";
+        var url0 = url + "?restaurant_id=" + restaurant_id;
+        window.location.href = url0;
+    });
+
+
+    //get the restaurants when click search
     $.ajax({
         url:"http://localhost:3000/restaurants/restaurants",
         data:Formdata,
         type:'GET',
         success: function (data) {
-            alert("GET Ajax is successful, return data in success: function (data): \n" + data);
             //在这里使用JQuery或者JS把data里的值设置进HTML元素里去
             //如果是数组类型的Json用JS函数遍历一下设置列表或表格就行
             //res.json返回的是json object
+
             console.log(data);
             var num = data.length;
             if (num != 0){
@@ -30,11 +44,15 @@ function PostKeyword() {
                         data[i].description,data[i].address,data[i].restaurant_rating);
 
                     //OMG!:选择ajaxData里面最后一个h3(也就是restaurant name)前面加上标号;
-                    // 因为每次最后一个是最新添加的
+                    //因为每次最后一个是最新添加的
                     $("#ajaxData h3:last").prepend(i+1 + ". ");
-                }
-            }
 
+                    //give an id to every single button
+                    $("#ajaxData input:last").attr("value",data[i]._id);
+                    $("#ajaxData input:last").attr("id",data[i]._id);
+                }
+
+            }
             else {alert("Sorry, no restaurant matching your condition...")}
         },
         error: function (xhr, status, error) {
@@ -62,7 +80,7 @@ function GenerateSection(img_path,para_name,para_type,para_discription,para_addr
     var address = $("<p>Address: </p>");
     var rating = $("<p>Rating: </p>");
 
-    var butt = $(" <input type=\"button\" class=\"btn btn-primary btn-lg\" value=\"Have a look!\">");
+    var butt = $(" <input type=\"button\" class=\"btn btn-primary btn-lg\">");
 
     img.attr("src", img_path);
 
