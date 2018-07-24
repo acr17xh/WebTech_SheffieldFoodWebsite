@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="height: 100%">
 <head>
     <title><%= title%></title>
 
@@ -13,86 +13,89 @@
     <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
     <link href="/stylesheets/one-page-wonder.min.css" rel="stylesheet">
+    <link href="/stylesheets/uploadPage.css" rel="stylesheet">
 
     <!-- Core JavaScript -->
     <script src="/javascripts/jquery.min.js"></script>
     <script src="/javascripts/bootstrap.bundle.min.js"></script>
+    <script src="http://malsup.github.io/min/jquery.form.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap-fileinput/4.4.8/js/fileinput.min.js"></script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBI87YwMOnQw5W3HgQ7A-x60FBNXpR8lKU&callback=initMap">
+    </script>
     <script src="/javascripts/upload.js"></script>
 </head>
 
 
-<body>
+<body style="height: 100%">
 
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="#"><%= title%>></a>
-
+        <a class="navbar-brand" href="http://localhost:3000">HOME PAGE</a>
+        <a class="navbar-brand" href="http://localhost:3000/upload">UPLOAD RESTAURANT</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Sign Up</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Log In</a>
-                </li>
-            </ul>
-        </div>
+        <div class="collapse navbar-collapse" id="navbarResponsive"></div>
 
     </div>
 </nav>
 
 <!--Header-->
-<header class="masthead text-center text-white">
+<header id="head" class="masthead text-center text-white">
     <div class="masthead-content">
         <div class="container">
             <h1 class="masthead-heading mb-0">Adding new restaurant</h1>
+            <h4 class="masthead-heading mb-3">Restaurant information</h4>
             <!--<a href="#" class="btn btn-primary btn-xl rounded-pill mt-5">Learn More</a>-->
         </div>
 
         <!--Search-->
         <br>
         <div>
-            <div class="container" align="center">
-                <label class="float-left">Restaurant information</label>
-                <div class="input-group">
-                    <form id=“UploadRest" method="post" enctype="multipart/form-data" onsubmit="return false"
-                    action="http://localhost:3000/restaurants/restaurants?method=post">
-                        <input id="restaurant_name" type="text" name="restaurant_name" class="form-control" placeholder="Restaurant name">
-                        <input id="address" type="text" name="address" class="form-control" placeholder="Address">
-                        <input id="type_of_cuisine" type="text" name="type_of_cuisine" class="form-control" placeholder="Type of cuisine">
-                        <input id="description" type="text" name="description" class="form-control" placeholder="description">
-                        <input id="official_photo" type="file" name="official_photo" class="form-control">
-                        <input id="restaurant_rating" type="text" name="restaurant_rating" class="form-control" placeholder="rating">
-                    </form>
-                </div><!-- /input-group -->
-                <br>
+            <div class="container-fluid" align="center">
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4" id="form_div">
 
-                <!--<label class="float-left">Review</label>-->
-                <!--<div class="input-group">-->
-                    <!--<form id=“UploadReview" onsubmit="return false">-->
-                        <!--<input id="review" type="text" name="restname" class="form-control" placeholder="Review here">-->
-                        <!--<input id="rating" type="text" name="restname" class="form-control" placeholder="Rating here">-->
-                    <!--</form>-->
-                <!--</div>&lt;!&ndash; /input-group &ndash;&gt;-->
-                <!--<br>-->
 
-                <!--<label class="float-left">Photo</label>-->
-                <!--<div class="input-group">-->
-                    <!--<form id=“UploadPhoto" onsubmit="return false">-->
-                        <!--<input id="PhotoTitle" type="text" name="restname" class="form-control" placeholder="Photo title">-->
-                        <!--<input id="PhotoURL" type="text" name="restname" class="form-control" placeholder="Photo url">-->
-                    <!--</form>-->
-                <!--</div>&lt;!&ndash; /input-group &ndash;&gt;-->
+                            <form id="uploadForm">
+
+                                <input type="text" name="restaurant_name" id="restaurant_name" class="form-control" placeholder="Restaurant name">
+                                <br>
+                                <input type="text" name="address" id="address" class="form-control" placeholder="Address">
+                                <br>
+                                <input type="text" name="type_of_cuisine" id="type_of_cuisine" class="form-control" placeholder="Cuisine type">
+                                <br>
+                                <input type="text" name="restaurant_rating" id="restaurant_rating" class="form-control" placeholder="Restaurant rating">
+                                <br>
+                                <textarea type="text" name="description" id="description" class="form-control" placeholder="Write some description in here..."
+                                cols="2" rows="10"></textarea>
+                                <br>
+                                <label for="official_photo">Choose photos: </label>
+                                <input type="file" name="official_photo" id="official_photo" class="btn-danger">
+                                <br>
+                                <br>
+                                <label for="lat">lat</label>
+                                <input disabled type="text"  name="lat" id="lat">
+                                <label for="lng">lng</label>
+                                <input disabled type="text"  name="lng" id="lng">
+                                <br>
+                                <br>
+                                <input type="submit" name="uploadFormButton" value="Submit" id="uploadFormButton" class="btn btn-success">
+                            </form>
+                            <br>
+
+                            <button id="getCor" class="btn btn-warning">Get Coordinates</button>
+                            <br>
+                            <br>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
                 <br>
-                <span class="input-group-btn">
-                    <input id="SubInfo" type="button" class="btn btn-primary btn-lg" value="SUBMIT">
-                </span>
 
             </div><!-- /.col-lg-6 -->
         </div><!-- /.row -->
@@ -101,11 +104,25 @@
     <div class="bg-circle-2 bg-circle"></div>
     <div class="bg-circle-3 bg-circle"></div>
     <div class="bg-circle-4 bg-circle"></div>
+
+    <div id="ajaxData"></div>
 </header>
+
+<div class="container-fluid" style="height: 90%;padding: 0">
+    <div class="row" style="height: 100%;padding: 0">
+        <div class="col-md-8" style="height: 100%;padding: 0">
+            <div id="map" style="height: 100%"></div>
+        </div>
+        <div class="col-md-4" style="height: 100%;padding: 0;background-color: #1b1e21">
+            <p id='map_notice' class='font-weight-normal display-4'>Drop the marker on destination to get coordinates</p>
+        </div>
+    </div>
+</div>
+
 
 <!-- Footer -->
 <footer class="py-5 bg-black">
-    <div class="container">
+    <div class="container" id="endbar">
         <p class="m-0 text-center text-white small">The University of Sheffield / Department of Computer Science
             Copyright &copy; TEAM Original 2018</p>
     </div>

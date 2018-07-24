@@ -22,6 +22,7 @@ var storage = multer.diskStorage({
 });
 var upload = multer({storage: storage});
 
+
 exports.postPhotos = function (req, res) {
     var db = req.db;
     var collection = db.get('photo');
@@ -40,7 +41,7 @@ exports.postPhotos = function (req, res) {
         path = path.replace(new RegExp("\\\\", "gm"), "/");
         path = path.replace("public", "");
         var photo_name = file.filename;
-        var data = {'photo_name': photo_name, 'date': date, 'user_photo_url': path};
+        var data = {'photo_name': photo_name, 'date': date, 'user_photo_url': path, 'restaurant_id': restaurant_id};
 
         insertPhotoThenUpdateRestaurant(collection, collection2, data).then(
             function (docs) {
@@ -57,6 +58,8 @@ exports.postPhotos = function (req, res) {
                 });
             },
             function (err) {
+                console.log("Error!");
+                console.log(err);
                 console.log(docs);
             }
         );
@@ -80,12 +83,15 @@ function insertPhotoThenUpdateRestaurant(collection, collection2, data) {
     });
 }
 
+
 exports.getPhotos = function (req, res) {
+    console.log(req.query.restaurant_id);
     var db = req.db;
     var collection = db.get('photo');
     var restaurant_id = monk.id(req.query.restaurant_id);
     restaurant_id = {'restaurant_id': restaurant_id};
     collection.find(restaurant_id, {}, function (err, docs) {
+        console.log(docs);
         res.json(docs);
     });
 }

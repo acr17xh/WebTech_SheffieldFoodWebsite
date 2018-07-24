@@ -23,6 +23,8 @@ var storage = multer.diskStorage({
 });
 var upload = multer({storage: storage});
 
+
+
 router.post('/photos', upload.array('photos', 5), photo_db.postPhotos);
 
 /*function insertPhotoThenUpdateRestaurant(collection, collection2, data) {

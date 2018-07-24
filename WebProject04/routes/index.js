@@ -6,12 +6,13 @@ router.get('/', function (req, res, next) {
     res.render('index', {title: 'Sheffield Food'});
 });
 
-/*跳转到restaurant.ejs的路由*/
+/*GET restaurant.ejs page*/
 router.get('/restaurant', function (req, res, next) {
     var _id = req.query.restaurant_id;
-
     // restaurant_id这个值一起带过去，因为在restaurant.ejs页面初始化要发起三个ajax,需要这个restaurant_id
+
     res.render('restaurant', {
+        //render渲染时把restaurant_id给到新的restaurant.ejs然后放在隐藏p中，id为"rest_id"
         restaurant_id:_id,
         title: "Restaurant Detail"
     });

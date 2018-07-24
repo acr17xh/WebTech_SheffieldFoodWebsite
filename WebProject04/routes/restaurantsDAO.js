@@ -8,6 +8,8 @@ var queryString = require('querystring');
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 var multer = require('multer');
+
+//导入controller
 var restaurant_db = require("../controller/restaurant");
 
 
@@ -25,7 +27,8 @@ var storage = multer.diskStorage({
 var upload = multer({storage: storage});
 
 //http://localhost:3000/restaurants/restaurants?keyword=Merde，GET    用keyword查找符合关键词的餐厅，keyword由前端接收表单参数，拼接url，然后用拼接后的url进行ajax get.
-// 建立的是复合全文索引，包括restaurant_name,address,type_of_cuisine,description (应该够了吧……)
+//建立复合全文索引，包括restaurant_name,address,type_of_cuisine,description
+
 /*router.get('/restaurants', function (req, res, next) {
     var db = req.db;
     var collection = db.get('restaurant');
@@ -53,4 +56,5 @@ router.get('/restaurants', restaurant_db.getRestaurants);
 router.get('/restaurant', restaurant_db.getRestaurant);
 
 router.post('/restaurants', upload.single('official_photo'),restaurant_db.postRestaurans);
+
 module.exports = router;

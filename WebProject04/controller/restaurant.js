@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var monk = require('monk');
 
-
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 
@@ -25,36 +24,42 @@ var storage = multer.diskStorage({
 var upload = multer({storage: storage});
 
 //暂时使用multer去解析multipart/form-data,不用connect-multiparty
-//暂时不在post中加入multipartMiddleware
-//餐厅官方图片暂定只准上传一张
+//餐厅官方图片只准上传一张
 
+
+
+
+//Searching keyword getting restaurant list logical
 exports.getRestaurants = function (req, res) {
     var db = req.db;
     var collection = db.get('restaurant');
     var keyword = req.query.keyword;
-    console.log(keyword);
+
+    //对数据库进行全文索引搜寻结果，无序列化版
     collection.find({$text: {$search: keyword}}, function (err, docs) {
         var result = docs;
         res.json(result);
 
         //注意：如果使用下面这种返回方式（序列化），前台ajax需要parse()以下把字符串转回对象
-        // res.json(JSON.stringify(result));
+        //res.json(JSON.stringify(result));
     });
 };
 
+//Jump to specific restaurant page logical
 exports.getRestaurant = function (req, res) {
     var db = req.db;
     var collection = db.get('restaurant');
     var id = monk.id(req.query.restaurant_id);
 
     var restaurant_id = {'_id': id};
+    //搜寻id获得餐厅具体信息
     collection.find(restaurant_id, function (err, docs) {
         res.json(docs);
     })
 };
 
+//Uploading restaurant logical
 exports.postRestaurans = function (req, res) {
-
     var db = req.db;
     //get a collection
     var collection = db.get('restaurant');
@@ -62,11 +67,11 @@ exports.postRestaurans = function (req, res) {
     date = date.toDateString();
     console.log(date);
 
-    //应该通过google map api得到lag,lng,这个给何旭 :>
-    var lag = 77.8;
-    var lng = 45.8;
+    //通过google map api dragned事件监听函数得到lag,lng:>
+    var lag = req.body.lat;
+    var lng = req.body.lng;
 
-    //评分可以由初始新建此餐厅的用户打分，也可以随机生成一个
+    //评分可以由初始新建此餐厅的用户打分
     var rating = req.body.restaurant_rating;
     console.log(rating);
 

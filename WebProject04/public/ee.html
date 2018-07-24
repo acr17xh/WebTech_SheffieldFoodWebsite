@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+    <link href="https://cdn.bootcss.com/bootstrap-fileinput/4.4.8/css/fileinput.min.css" rel="stylesheet">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="http://malsup.github.io/min/jquery.form.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap-fileinput/4.4.8/js/fileinput.min.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+
+            //注意别忘了引入js和css
+            //Bootstrap Fileinput Plugin
+            //其他高端配置参见官方文档
+            $("#fileinput1").fileinput({
+                uploadUrl: 'http://localhost:3000/photos/photos?method=post',
+                uploadAsync: true,
+                showPreview: true,
+                //我就不信有人传大于1920×1080的图
+                maxImageWidth: 1920,
+                maxImageHeight: 1080,
+                resizeImage: true,
+                maxFilePreviewSize: 30720,
+                maxFileSize: 30720,
+                maxFileCount: 5,
+                allowedFileExtensions: ["jpg", "png"],
+                uploadExtraData: function (previewId, index) {
+                    var restaurant_id = $("#restaurant_id").val();
+                    var parameters = {"restaurant_id": restaurant_id};
+                    return parameters;
+                }
+            });
+
+            //Ajax上传文件和普通文字表单混合，使用jquery.form.min.js
+            $("#uploadForm").on("submit", function () {
+                UploadAjaxSubmit();
+            });
+
+        });
+
+        var options = {
+            target: '#ajaxData',   // target element(s) to be updated with server response
+            beforeSubmit: showRequest,  // pre-submit callback
+            success: showResponse, // post-submit callback
+            /*success: function (data) {
+                var dataJSON = JSON.parse(data);
+                alert(dataJSON);
+            },*/
+            // other available options:
+            url: 'http://localhost:3000/restaurants/restaurants',        // override for form's 'action' attribute
+            type: 'post',    // 'get' or 'post', override for form's 'method' attribute
+            // dataType: 'json'        // 'xml', 'script', or 'json' (expected server response type)
+            //clearForm: true        // clear all form fields after successful submit
+            //resetForm: true        // reset the form after successful submit
+
+            // $.ajax options can be used here too, for example:
+            //timeout:   3000
+        };
+
+        //ajax 上传餐厅到mongodb
+        function UploadAjaxSubmit() {
+
+            $("#uploadForm").ajaxSubmit(options);
+            // !!! Important !!!
+            // always return false to prevent standard browser submit and page navigation
+            return false;
+        }
+
+        // pre-submit callback
+        function showRequest(formData, jqForm, options) {
+            // formData is an array; here we use $.param to convert it to a string to display it
+            // but the form plugin does this for you automatically when it submits the data
+            var queryString = $.param(formData);
+
+            // jqForm is a jQuery object encapsulating the form element.  To access the
+            // DOM element for the form do this:
+            // var formElement = jqForm[0];
+
+            alert('About to submit: \n\n' + queryString);
+
+            // here we could return false to prevent the form from being submitted;
+            // returning anything other than false will allow the form submit to continue
+            return true;
+        }
+
+        //这个回调好像没起作用?
+        // post-submit callback
+        function showResponse(responseText, statusText, xhr, $form) {
+            // for normal html responses, the first argument to the success callback
+            // is the XMLHttpRequest object's responseText property
+
+            // if the ajaxSubmit method was passed an Options Object with the dataType
+            // property set to 'xml' then the first argument to the success callback
+            // is the XMLHttpRequest object's responseXML property
+
+            // if the ajaxSubmit method was passed an Options Object with the dataType
+            // property set to 'json' then the first argument to the success callback
+            // is the json data object returned by the server
+            //数据是插入了，这回调没起作用？
+            console.log("success showResponse!!!!!!!!!");
+            alert("success showResponse!!!!!!!!!!!!!!!!");
+            alert('status: ' + statusText + '\n\nresponseText: \n' + responseText +
+                '\n\nThe output div should have already been updated with the responseText.');
+        }
+    </script>
+
+
+
+
+</head>
+<body>
+<h4>这些个URL API写的贼乱，真蠢，也不知道谁写的对不对 :D</h4>
+
+
+
+<label>这是上传餐厅的ajax.注意我那个写法里上传成功后的回调不起效，查了不知道为什么。不影响插入文档到mongodb</label>
+<form id="uploadForm">
+    <label for="restaurant_name">restaurant name: </label>
+    <input type="text" name="restaurant_name" id="restaurant_name">
+
+    <label for="address">address: </label>
+    <input type="text" name="address" id="address">
+
+    <label for="type_of_cuisine">type_of_cuisine: </label>
+    <input type="text" name="type_of_cuisine" id="type_of_cuisine">
+
+    <label for="description">description: </label>
+    <input type="text" name="description" id="description">
+
+    <label for="restaurant_rating">restaurant_rating: </label>
+    <input type="text" name="restaurant_rating" id="restaurant_rating">
+
+    <label for="official_photo">official_photo: </label>
+    <input type="file" name="official_photo" id="official_photo">
+
+    <input type="submit" name="uploadFormButton" value="Submit" id="uploadFormButton">
+</form>
+
+
+
+<a href="http://localhost:3000/restaurant?restaurant_id=5af5eeab0b0a8425ec1863a9"><h3>某某餐厅标题</h3></a>
+<input id="fileinput1" name="photos" type="file" multiple>
+<label>这里有个input type="hidden" value里是餐厅id，对于mongodb的记录。你的mongodb可能没有这个id的文档记录（废话……），自己改个别的有的试试咩。
+    别忘了引入boostrap和fileinput插件，注意下载完整的bootstrap/fileinput再本地引入，有的js会引用别的文件的，直接CDN引入会有问题.
+    我目前设置的是不超过5张上传，后台可以设置，前台参数也可以设置。两者要对应。</label>
+<input type="hidden" id="restaurant_id" name="restaurant_id" value="5af5f8118082070978a50d47">
+<label id="ajaxData"></label>
+
+
+
+<label>评论上传只涉及文本我就不写了吧（闲鱼）</label>
+<br/>
+
+
+
+
+
+
+
+
+
+<script>
+
+
+
+    var Connect_Status = false;
+    var Status_times = 0;
+
+    $(function () {
+        $("#SubReview").click(function () {
+            if (Connect_Status){
+                if (Status_times=0) {
+                    PostReviews();
+                }
+                else if (Status_times!=0){
+                    GetLocal();
+                    PostReviews();
+                }
+            }
+            else if (!Connect_Status){
+                SaveLocal();
+                alert("Your input already saved in local storage. connect and try again");
+            }
+
+        });
+    });
+
+    $(function () {
+        //注意别忘了引入js和css
+        //Bootstrap Fileinput Plugin
+        //其他高端配置参见官方文档
+        $("#fileinput1").fileinput({
+            uploadUrl: 'http://localhost:3000/photos/photos?method=post',
+            uploadAsync: true,
+            showPreview: true,
+            //我就不信有人传大于1920×1080的图
+            maxImageWidth: 1920,
+            maxImageHeight: 1080,
+            resizeImage: true,
+            maxFilePreviewSize: 30720,
+            maxFileSize: 30720,
+            maxFileCount: 5,
+            allowedFileExtensions: ["jpg", "png"],
+            uploadExtraData: function (previewId, index) {
+                var restaurant_id = $("#restaurant_id").val();
+                var parameters = {"restaurant_id": restaurant_id};
+                return parameters;
+            }
+        });
+    });
+
+
+    $(document).ready(function () {
+
+        window.addEventListener("online", function (e) {
+            alert("online");
+            Connect_Status = true;
+        });
+        window.addEventListener("offline", function (e) {
+            alert("offline");
+            Connect_Status = false;
+            Status_times = Status_times + 1;
+        });
+
+
+
+
+        //get the restaurant id
+        var restaurant_id = $("#rest_id").text();
+        $("#restaurant_id").attr("value",restaurant_id);
+
+        //使用了app.use中的middleware,中间是restaurants,后面是route.get的/restaurant
+        var url_rest = "http://localhost:3000/restaurants/restaurant"+"?restaurant_id="+restaurant_id;
+        var url_review = "http://localhost:3000/reviews/reviews"+"?restaurant_id="+restaurant_id;
+        var url_photo = "http://localhost:3000/photos/photos"+"?restaurant_id="+restaurant_id;
+
+        //get restaurant detail
+        $.ajax({
+            url:url_rest,
+            type:'GET',
+            success: function (data) {
+                var rest_name = data[0].restaurant_name;
+                var rest_type = data[0].type_of_cuisine;
+                var rest_address = data[0].address;
+                var rest_description = data[0].description;
+                var rest_rating = data[0].restaurant_rating;
+                var rest_offcial_photo = data[0].official_photo_url;
+
+                var rest_lat = data[0].coordinate.lat;
+                var rest_lng = data[0].coordinate.lng;
+                var rest_date = data[0].date;
+
+                GenerateRestaurantDetail(rest_name,rest_type,rest_address,
+                    rest_description,rest_rating,rest_offcial_photo,
+                    rest_lat,rest_lng,rest_date);
+            },
+            error: function (xhr, status, error) {
+                alert("wrong");
+                alert(error.message);
+            }
+
+        });
+
+        $.ajax({
+            url:url_review,
+            type:'GET',
+            success:function (data) {
+                var num = data.length;
+                for (var i = 0; i < num; i++) {
+                    var review_username = data[i].username;
+                    var review_description = data[i].review_description;
+                    var review_ratings = data[i].ratings;
+                    var review_date = data[i].date;
+
+                    GenerateReview(review_username,review_description,review_ratings,review_date);
+                }
+            },
+            error: function (xhr, status, error) {
+                alert("wrong");
+                alert(error.message);
+            }
+        });
+
+        $.ajax({
+            url: url_photo,
+            type: 'GET',
+            success: function (data) {
+                alert("photo receive!");
+                alert(data.length);
+                console.log(data);
+
+                var numb = data.length;
+                for (var i=0; i<numb; i++){
+                    var photo_url = data[i].user_photo_url;
+                    var photo_name = data[i].photo_name;
+                    var photo_date = data[i].date;
+
+                    GeneratePhoto(numb,photo_url,photo_name,photo_date);
+                }
+            }
+        })
+    })
+
+    //Saving data to local storage
+    function SaveLocal() {
+        var Restaurant_id = $("#rest_id").text();
+        var Username = $("#username").val();
+        var Review_description = $("#review_description").val();
+        var Rating = $("#ratings").val();
+        localStorage.setItem("restaurant_id", Restaurant_id );
+        localStorage.setItem("username", Username);
+        localStorage.setItem("review_description", Review_description);
+        localStorage.setItem("rating", Rating);
+    }
+
+    function GetLocal() {
+        var Restaurant_id = localStorage.getItem("restaurant_id");
+        var Username = localStorage.getItem("username");
+        var Review_description = localStorage.getItem("review_description");
+        var Rating = localStorage.getItem("rating");
+        $("#username").val(Username);
+        $("#review_description").val(Review_description);
+        $("#ratings").val(Rating);
+    }
+
+    //Generate restaurant detail and used in ajax
+    function GenerateRestaurantDetail(name,type,address,descr,rating,photo,lat,lng,date) {
+        $("#rest_name").text(name);
+
+        var section = $("<section></section>");
+        var container_div = $("<div class='container'></div>");
+        var row_div = $("<div class='row align-items-center'></div>");
+        var col_div = $("<div class='col-lg-12'></div>");
+        var p5_div = $("<div class='p-5'></div>");
+        var img = $("<img class='img-fluid rounded-circle'>");
+
+        var type_p = $("<p class='display-4'></p>");
+        var address_p = $("<p class='display-4'></p>");
+        var descr_p = $("<p class='display-4'></p>");
+        var rating_p = $("<p class='display-4'></p>");
+        var date_p = $("<p class='display-4'></p>");
+
+        img.attr("src", photo);
+        type_p.append("Cuisine Type: "+type);
+        address_p.append("Address: "+address);
+        descr_p.append("Description: "+descr);
+        rating_p.append("Rating: "+rating);
+        date_p.append("Adding Date: "+date);
+
+        p5_div.append(img);
+        p5_div.append(type_p);
+        p5_div.append(address_p);
+        p5_div.append(descr_p);
+        p5_div.append(rating_p);
+        p5_div.append(date_p);
+        col_div.append(p5_div);
+        row_div.append(col_div);
+        container_div.append(row_div);
+        section.append(container_div);
+        $("#ajaxData").append(section);
+    }
+
+    //Generate review detail and return in ajax
+    function GenerateReview(review_username,review_description,review_ratings,review_date) {
+        var section = $("<section></section>");
+        var container_div = $("<div class='container'></div>");
+        var row_div = $("<div class='row align-items-center'></div>");
+        var col_div = $("<div class='col-lg-12'></div>");
+        var p5_div = $("<div class='p-5'></div>");
+
+        var username_p = $("<p></p>");
+        var review_descr_p = $("<p></p>");
+        var ratings_p = $("<p></p>");
+        var date_p = $("<p></p>")
+
+        username_p.append(review_username);
+        username_p.append(":");
+        review_descr_p.append("\"");
+        review_descr_p.append(review_description);
+        review_descr_p.append("\"");
+        ratings_p.append("Rating: ");
+        ratings_p.append(review_ratings);
+        date_p.append("Review time: ")
+        date_p.append(review_date);
+
+        p5_div.append(username_p);
+        p5_div.append(review_descr_p);
+        p5_div.append(ratings_p);
+        p5_div.append(date_p);
+        col_div.append(p5_div);
+        row_div.append(col_div);
+        container_div.append(row_div);
+        section.append(container_div);
+        $("#ajaxData").append(section);
+    }
+
+    //Generate photo detail
+    function GeneratePhoto(number, photo_url, photo_name, date) {
+        var myCarousel = $("<div id='myCarousel' class='carousel slide'></div>");
+        var ol = $("<ol class='carousel-indicators'></ol>");
+        for (let i=0; i<number; i++){
+            var li = $("<li data-target='#myCarousel' data-slide-to=i ></li>");
+            ol.append(li);
+            if (i = 0){
+                li.attr("class","active");
+            }
+        }
+
+
+        var carouselInner = $("<div class='carousel-inner'></div>")
+        for (let j=0; j<number;j++){
+            var img = $("<img>");
+            img.attr("src",photo_url);
+            img.attr("alt",j.toString());
+
+            var item = $("<div class='item'></div>")
+            item.append(img);
+            if (j=0){
+                item.attr("class","active item");
+            }
+
+            carouselInner.append(item);
+        }
+
+
+        var a_left = $("<a class='carousel-control left' href='#myCarousel' role='button' data-slide='prev'></a>")
+        var gly_left = $("<span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span>");
+        var sr_left = $("<span class='sr-only'>previous</span>");
+        a_left.append(gly_left);
+        a_left.append(sr_left);
+
+        var a_right = $("<a class='carousel-control right' href='#myCarousel' role='button' data-slide='next'></a>")
+        var gly_right = $("<span class='glyphicon glyphicon-chevron-right' aria-hidden='true'></span>");
+        var sr_right = $("<span class='sr-only'>next</span>");
+        a_right.append(gly_right);
+        a_right.append(sr_right);
+
+
+        myCarousel.append(ol);
+        myCarousel.append(carouselInner);
+        myCarousel.append(a_left);
+        myCarousel.append(a_right);
+
+        $("#ajaxData").append(myCarousel);
+    }
+
+    //functions define area
+    function PostReviews() {
+        var re_id = $("#rest_id").text();
+        var username = $("#username").val();
+        var review_description = $("#review_description").val();
+        var ratings = $("#ratings").val();
+
+        var url_post_review = "http://localhost:3000/reviews/reviews";
+        var ReviewFormData = {
+            "restaurant_id":re_id,
+            "username":username,
+            "review_description":review_description,
+            "ratings":ratings
+        };
+        var JsonReviewFormData = JSON.stringify(ReviewFormData);
+
+        $.ajax({
+            url:url_post_review,
+            type:'POST',
+            data:JsonReviewFormData,
+            contentType:"application/json",
+            success: function (data) {
+                alert("Review upload successful!");
+
+                var NewAddUsername = data.username;
+                var NewAddReview = data.review_description;
+                var NewAddratings = data.ratings;
+                var NewAddDate = data.date;
+
+                GenerateReview(NewAddUsername,NewAddReview,NewAddratings,NewAddDate);
+            },
+            error: function (xhr, status, error) {
+                alert("Wrong");
+                alert(error.message);
+            }
+        });
+    }
+
+</script>
+
+
+
+
+
+
+</body>
+</html>

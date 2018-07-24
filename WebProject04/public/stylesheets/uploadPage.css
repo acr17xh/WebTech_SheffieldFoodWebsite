@@ -1,0 +1,15 @@
+#restaurant_name{width: 100%;}
+#address{width: 100%;}
+#type_of_cuisine{width: 100%;}
+#restaurant_rating{width: 100%;}
+
+#lat{width: 40%;}
+#lng{width: 40%;}
+
+#uploadFormButton{width: 40%;}
+#getCor{width: 40%;}
+#map_notice{
+    color: white;
+    position: relative;
+    top: 40%; left: 5%;
+}

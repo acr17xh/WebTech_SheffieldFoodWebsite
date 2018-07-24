@@ -1,0 +1,49 @@
+#review_area{
+    height: 400px;
+    width: 100%;
+    overflow: auto;
+    border: #ff6d21 5px solid;
+    border-radius: 2%;
+    padding: 12px;
+}
+
+#map{
+    /*height: 600px;*/
+}
+
+#UploadReview{
+    width: 100%;
+}
+#username{width: 90%;}
+#review_description{width: 90%;}
+#ratings{width: 90%;}
+#SubReview{width: 30%;}
+
+#container{
+    background-color: #1b1e21;
+    height: 600px;
+}
+#row1{
+    height: 80%;
+    text-align: center;
+    /*因为图片是inline元素而不是块级元素，所以可以用text-align*/
+}
+#row2{
+    height: 20%;
+    overflow: auto;
+}
+#main_img{
+    height: 100%;
+}
+#Phototitle{
+    color: white;
+    position: relative;
+    top: 10%;
+}
+#img_bar{
+    overflow: auto;
+}
+
+html{height: 100%;}
+body{height: 100%;}
+header{height: 80%;}

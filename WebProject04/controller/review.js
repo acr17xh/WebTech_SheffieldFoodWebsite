@@ -9,6 +9,7 @@ var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 var multer = require('multer');
 
+//Getting review via restaurant id
 exports.getReviews = function (req, res) {
     var db = req.db;
     var collection = db.get('review');
@@ -19,16 +20,21 @@ exports.getReviews = function (req, res) {
     });
 };
 
+//uploading review review
 exports.postReviews = function (req, res) {
+    //Get database
     var db = req.db;
     var collection = db.get('review');
+    //Get parameters in request body
     var date = new Date();
     date = date.toDateString();
     var review_description = req.body.review_description;
     var ratings = req.body.ratings;
     ratings = parseInt(ratings, 10);
     var username = req.body.username;
+
     var restaurant_id = monk.id(req.body.restaurant_id);
+
     var data = {
         'review_description': review_description,
         'ratings': ratings,

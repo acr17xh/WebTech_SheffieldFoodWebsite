@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head style="height: 100%">
     <title><%= title %></title>
 
     <meta charset="utf-8">
@@ -13,32 +13,34 @@
     <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
     <link href="/stylesheets/one-page-wonder.min.css" rel="stylesheet">
+    <link href="/stylesheets/restaurantPage.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/bootstrap-fileinput/4.4.8/css/fileinput.min.css" rel="stylesheet">
 
     <script src="/javascripts/jquery.min.js"></script>
     <script src="/javascripts/bootstrap.bundle.min.js"></script>
+    <script src="/javascripts/bootstrap.min.js"></script>
+    <script src="http://malsup.github.io/min/jquery.form.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap-fileinput/4.4.8/js/fileinput.min.js"></script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBI87YwMOnQw5W3HgQ7A-x60FBNXpR8lKU&callback=initMap">
+    </script>
     <script src="/javascripts/restaurantPage.js"></script>
 
 </head>
 
 
-<body>
-
+<body style="height: 100%">
 <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="#"><%= title %></a>
+        <a class="navbar-brand" href="http://localhost:3000">HOME PAGE</a>
+        <a class="navbar-brand" href="http://localhost:3000/upload">UPLOAD RESTAURANT</a>
+        <a class="navbar-brand" id="itself">RESTAURANT PAGE</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Sign Up</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Log In</a>
-                </li>
-            </ul>
+
         </div>
     </div>
 </nav>
@@ -46,10 +48,11 @@
 <header class="masthead text-center text-white">
     <div class="masthead-content">
         <div class="container">
+
+            <!--用controller里面的render把restaurant_id给到页面-->
             <p hidden id="rest_id"><%=restaurant_id%></p>
             <h1 class="masthead-heading mb-0" id="rest_name"></h1>
             <h2 class="masthead-subheading mb-0">All Tasty Foods</h2>
-            <!--<a href="#" class="btn btn-primary btn-xl rounded-pill mt-5">Learn More</a>-->
         </div>
     </div>
     <div class="bg-circle-1 bg-circle"></div>
@@ -58,11 +61,92 @@
     <div class="bg-circle-4 bg-circle"></div>
 </header>
 
+<div id="map"></div>
+
 <div id="ajaxData"></div>
+<br>
+<br>
 
 
+
+
+<!--display photo wall-->
+<div class="container-fluid" id="container">
+    <div class="row" id="row1">
+        <div class="col-md-3 text-center">
+            <label id="Phototitle" class="display-4">Restaurant photo:</label><br>
+        </div>
+        <div class="col-md-6" id="main_image">
+            <img id="main_img">
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+    <div class="row" id="row2">
+        <div class="col-md-2"></div>
+        <div class="col-md-8" id="img_bar"></div>
+        <div class="col-md-2"></div>
+    </div>
+</div>
+<br>
+<br>
+
+<!--upload review and photo module-->
+<div>
+    <!--upload reviews-->
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-md-2"></div>
+
+            <div class="input-group col-md-4" id="anm3">
+                <label class="float-left display-4">reviewing here: </label>
+                <form id="UploadReview" method="post" onsubmit="return false">
+                    <input id="username" type="text" name="username" class="form-control" placeholder="Your username"><br>
+                    <textarea id="review_description" type="text" name="review_description" cols="4" rows="7"
+                              class="form-control" placeholder="Please write your review here..."></textarea><br>
+                    <input id="ratings" type="text" name="ratings" class="form-control" placeholder="Rating number (1~6)"><br>
+                    <button id="SubReview" class="btn btn-primary btn-lg">submit</button>
+                </form><br>
+            </div><!-- /input-group -->
+
+            <div class="col-md-5" id="anm4">
+                <label class="float-left display-4" id="review_title">'s review:</label><br>
+                <div id="review_area"></div>
+            </div>
+
+            <div class="col-md-1"></div>
+        </div>
+    </div><!-- /.col-lg-6 -->
+    <br>
+    <br>
+
+    <!--upload photos-->
+    <div class="container" align="center">
+        <br>
+        <label class="float-center display-4">
+            Upload your photos in here...
+        </label>
+        <!--滑动居中，且具有响应式布局-->
+        <div class="float-center" style="width: 50%">
+            <br>
+            <input id="fileinput1" name="photos" type="file" multiple>
+            <br>
+            <input type="hidden" id="restaurant_id" name="restaurant_id">
+
+        </div><!-- /input-group -->
+        <br>
+    </div><!-- /.col-lg-6 -->
+</div><!-- /.row -->
+
+
+
+<!-- Footer -->
+<footer class="py-5 bg-black">
+    <div class="container">
+        <p class="m-0 text-center text-white small">The University of Sheffield / Department of Computer Science
+            Copyright &copy; TEAM Original 2018</p>
+    </div>
+</footer>
 
 </body>
-
-
 </html>

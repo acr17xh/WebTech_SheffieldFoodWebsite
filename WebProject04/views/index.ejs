@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="height: 100%">
 <head>
     <title><%= title %></title>
 
@@ -16,28 +16,25 @@
 
     <script src="/javascripts/jquery.min.js"></script>
     <script src="/javascripts/bootstrap.bundle.min.js"></script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBI87YwMOnQw5W3HgQ7A-x60FBNXpR8lKU&callback=initMap">
+    </script>
     <script src="/javascripts/index.js"></script>
+    <script src="/javascripts/scrollTop.js"></script>
 </head>
 
 
-<body>
+<body style="height: 100%">
 
 <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="#"><%= title %></a>
+        <a class="navbar-brand" href="http://localhost:3000"><%= title %></a>
+        <a class="navbar-brand" href="http://localhost:3000/upload">UPLOAD RESTAURANT</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Sign Up</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Log In</a>
-                </li>
-            </ul>
         </div>
     </div>
 </nav>
@@ -54,7 +51,7 @@
         <div>
             <div class="container" align="center">
                 <div class="input-group">
-                    <form id="sForm" onsubmit="return false" method="get" class="form-control input-group">
+                    <form id="sForm" onsubmit="return false" method="get" class="form-control input-group" style="padding: 0">
                         <input type="text" name="keyword" id="keyword" class="form-control" placeholder="Today you want ...">
                         <span class="input-group-btn">
                             <input type="button" name="search" id="search" class="btn btn-primary btn-lg" value="search">
@@ -70,30 +67,16 @@
     <div class="bg-circle-4 bg-circle"></div>
 </header>
 
-
-
-
-
-<!--<form id=“xForm" onsubmit="return false">-->
-    <!--<p>-->
-        <!--<label for='firstname'>First name:</label>-->
-        <!--<input type="text" name="firstname" id="firstname" value="Mickey">-->
-    <!--</p>-->
-    <!--<p>-->
-        <!--<label for='lastname'>Last name:</label>-->
-        <!--<input type="text" name="lastname" id="lastname" value="Mouse">-->
-    <!--</p>-->
-    <!--<p>-->
-        <!--<label for='birthyear'>Year of Birth:</label>-->
-        <!--<input type="number" name="birthyear" id="birthyear" value="1900">-->
-    <!--</p>-->
-    <!--<p>-->
-        <!--<input type="button" name="xFormbutton" value="Submit" id="xFormbutton">-->
-    <!--</p>-->
-<!--</form>-->
-
-
+<div id="map" style="height: 70%"></div>
 <div id="ajaxData"></div>
+<!-- Footer -->
+<footer class="py-5 bg-black">
+    <div class="container">
+        <p class="m-0 text-center text-white small">The University of Sheffield / Department of Computer Science
+            Copyright &copy; TEAM Original 2018</p>
+    </div>
+    <!-- /.container -->
+</footer>
 
 </body>
 
